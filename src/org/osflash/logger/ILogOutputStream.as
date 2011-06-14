@@ -12,6 +12,10 @@ package org.osflash.logger
 		
 		function contains(output : ILogOutput) : Boolean;
 		
+		function getAt(index : int) : ILogOutput;
+		
 		function write(level : LogLevel, message : String) : void;
+		
+		function get length() : int;
 	}
 }

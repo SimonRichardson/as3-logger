@@ -1,9 +1,12 @@
-package org.osflash.logger
+package org.osflash.logger.streams
 {
+	import org.osflash.logger.ILogOutput;
+	import org.osflash.logger.ILogOutputStream;
+	import org.osflash.logger.LogLevel;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
-	public class LogOutputStream implements ILogOutputStream
+	public class DefaultOutputStream implements ILogOutputStream
 	{
 		
 		/**
@@ -14,7 +17,7 @@ package org.osflash.logger
 		/**
 		 * Constructor for the LogOutputStream
 		 */
-		public function LogOutputStream()
+		public function DefaultOutputStream()
 		{
 			_outputs = new Vector.<ILogOutput>();
 		}
@@ -53,6 +56,17 @@ package org.osflash.logger
 		{
 			return _outputs.indexOf(output) >= 0;
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function getAt(index : int) : ILogOutput
+		{
+			if(index < 0 || index >= _outputs.length)
+				throw new RangeError();
+			
+			return _outputs[index];
+		}
 
 		/**
 		 * @inheritDoc
@@ -67,5 +81,10 @@ package org.osflash.logger
 				output.log(level, outputMessage);
 			}
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get length() : int { return _outputs.length; }
 	}
 }

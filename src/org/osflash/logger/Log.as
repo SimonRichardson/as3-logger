@@ -57,5 +57,10 @@ package org.osflash.logger
 		{
 			_stream.write(LogLevel.FATAL, args.join(" "));
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get stream() : ILogOutputStream { return _stream; }
 	}
 }

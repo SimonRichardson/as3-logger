@@ -15,5 +15,7 @@ package org.osflash.logger
 		function error(...args) : void;
 
 		function fatal(...args) : void;
+		
+		function get stream() : ILogOutputStream;
 	}
 }

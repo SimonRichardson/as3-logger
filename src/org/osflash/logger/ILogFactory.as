@@ -6,6 +6,6 @@ package org.osflash.logger
 	public interface ILogFactory
 	{
 		
-		function create(type : int = -1) : ILog;
+		function create(type : int, buffered : Boolean = false) : ILog;
 	}
 }

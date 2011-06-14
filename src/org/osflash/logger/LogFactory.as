@@ -1,8 +1,11 @@
 package org.osflash.logger
 {
+	import org.osflash.logger.streams.BufferedOutputStream;
 	import org.osflash.logger.formatter.LogDateFormatter;
 	import org.osflash.logger.formatter.LogTimestampFormatter;
+	import org.osflash.logger.output.TextFieldOutput;
 	import org.osflash.logger.output.TraceOuput;
+	import org.osflash.logger.streams.DefaultOutputStream;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
@@ -11,27 +14,45 @@ package org.osflash.logger
 		
 		public static const DEFAULT : int = 0;
 		
+		public static const BUFFERED : int = 1;
+		
+		public static const TEXTFIELD : int = 2;
+		
 		logger_namespace static const DEFAULT_LOGGER : ILog = new LogFactory().create(DEFAULT);
 		
-		public function create(type : int = -1) : ILog
+		public function create(type : int, buffered : Boolean = false) : ILog
 		{
+			var output : ILogOutput;
+			
+			const stream : ILogOutputStream = buffered ? 
+														new BufferedOutputStream() 
+														: 
+														new DefaultOutputStream();
 			switch(type)
 			{
+				case TEXTFIELD:
+					output = new TextFieldOutput();
+					
+					output.add(new LogDateFormatter());
+					output.add(new LogTimestampFormatter());
+					
+					stream.add(output);	
+					break; 
+					
 				case DEFAULT:
-					const stream : ILogOutputStream = new LogOutputStream();
-					const output : ILogOutput = new TraceOuput();
+					output = new TraceOuput();
 					
 					output.add(new LogDateFormatter());
 					output.add(new LogTimestampFormatter());
 					
 					stream.add(output);
-					
-					return new Log(stream);
 					break;
 				default:
 					throw new ArgumentError('Unknown log type');
 					break;
 			}
-		}		
+			
+			return new Log(stream);
+		}	
 	}
 }
