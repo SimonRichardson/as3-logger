@@ -1,0 +1,5 @@
+h1. AS3-Logger
+
+AS3-Logger is a attempt to provide a unified logging API.
+
+AS3-Logger uses the "MIT":http://en.wikipedia.org/wiki/MIT_License license.
