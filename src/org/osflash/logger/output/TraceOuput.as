@@ -11,6 +11,9 @@ package org.osflash.logger.output
 		
 		private static const method : Function = getDefinitionByName('trace') as Function;
 			
+		/**
+		 * @inheritDoc
+		 */			
 		override public function log(level : LogLevel, message : String) : void
 		{
 			method('[' + level.name.toUpperCase() + ']', message);
