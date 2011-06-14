@@ -11,6 +11,8 @@ package org.osflash.logger
 		
 		public static const DEFAULT : int = 0;
 		
+		logger_namespace static const DEFAULT_LOGGER : ILog = new LogFactory().create(DEFAULT);
+		
 		public function create(type : int = -1) : ILog
 		{
 			switch(type)
