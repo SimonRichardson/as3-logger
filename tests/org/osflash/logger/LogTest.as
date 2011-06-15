@@ -12,7 +12,7 @@ package org.osflash.logger
 		public function setUp() : void
 		{
 			const factory : ILogFactory = new LogFactory();
-			_log = factory.create(LogFactory.DEFAULT);
+			_log = factory.create(LogFactory.SOS);
 		}
 		
 		[After]
@@ -25,6 +25,12 @@ package org.osflash.logger
 		public function test_logger_exists() : void
 		{
 			_log.debug('HELLO', 'WORLD');
+		}
+		
+		[Test]
+		public function test_multiline_sos() : void
+		{
+			_log.debug('hello world\nthis is a funky message');
 		}
 	}
 }

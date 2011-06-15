@@ -14,6 +14,8 @@ package org.osflash.logger.output
 	public class SOSMaxOutput extends AbstractOutput implements ILogOutput
 	{
 		
+		private static const PACKET_HEADER : String = '!SOS';
+		
 		/**
 		 * @private
 		 */
@@ -43,16 +45,16 @@ package org.osflash.logger.output
 		override public function log(level : LogLevel, message : String) : void
 		{
 			if (_socket.connected)
-			{
-				_socket.send("!SOS<showMessage key=\"" + 
-											level.name + 
-											"\">" + 
-											escapeXML(message) + 
-											"</showMessage>\n"
-											);
-			}
+				_socket.send(buildMessage(level, message));
             else
-            	_buffer.push(new BufferedOutputMessage(this, level, message));
+            {
+            	const bufferedMessage : BufferedOutputMessage = new BufferedOutputMessage(
+																	this, 
+																	level, 
+																	buildMessage(level, message)
+																	);
+            	_buffer.push(bufferedMessage);
+            }
 		}
 		
 		/**
@@ -60,24 +62,18 @@ package org.osflash.logger.output
 		 */
 		private function handleConnect(event : Event) : void 
 		{
-			_socket.send("!SOS<clear/>\n");
-			_socket.send("!SOS<setKey><name>debug</name><color>" + 0xefefef + "</color></setKey>\n");
-			_socket.send("!SOS<setKey><name>trace</name><color>" + 0xffffff + "</color></setKey>\n");
-			_socket.send("!SOS<setKey><name>info</name><color>" + 0xe2ff00 + "</color></setKey>\n");
-			_socket.send("!SOS<setKey><name>warn</name><color>" + 0xff7c00 + "</color></setKey>\n");
-			_socket.send("!SOS<setKey><name>error</name><color>" + 0xff008e + "</color></setKey>\n");
-			_socket.send("!SOS<setKey><name>fatal</name><color>" + 0x00ff00 + "</color></setKey>\n");
+			_socket.send(buildClear());
+			_socket.send(buildSetKey(LogLevel.DEBUG, 0xefefef));
+			_socket.send(buildSetKey(LogLevel.INFO, 0xe2ff00));
+			_socket.send(buildSetKey(LogLevel.WARN, 0xff7c00));
+			_socket.send(buildSetKey(LogLevel.ERROR, 0xff008e));
+			_socket.send(buildSetKey(LogLevel.FATAL, 0xff0000));
 			
 			const total : int = _buffer.length;
 			for(var i : int = 0; i<total; i++)
 			{
 				const bufferedMessage : BufferedOutputMessage = _buffer[i];
-				_socket.send("!SOS<showMessage key=\"" + 
-											bufferedMessage.level.name + 
-											"\">" + 
-											escapeXML(bufferedMessage.message) + 
-											"</showMessage>\n"
-											);
+				_socket.send(bufferedMessage.message);
 			}
 			
 			_buffer.length = 0;
@@ -94,12 +90,67 @@ package org.osflash.logger.output
 		/**
 		 * @private
 		 */
-		private function escapeXML(value : String) : String 
+		private function escapeMessage(value : String) : String 
 		{
+			if(null == value) return '(null)';
+			
 			value = value.replace(/&/ig, "&amp;");
 			value = value.replace(/\</ig, "&lt;");
 			value = value.replace(/\>/ig, "&gt;");
 			return value;
+		}
+		
+		private function buildClear() : String
+		{
+			var result : String = PACKET_HEADER;
+			
+			result += '<clear/>';
+			result += '\n';
+			
+			return result;
+		}
+		
+		/**
+		 * @private
+		 */
+		private function buildSetKey(level : LogLevel, color : int) : String
+		{
+			var result : String = PACKET_HEADER;
+			
+			result += '<setKey>';
+			result += '<name>' + level.name + '</name>';
+			result += '<color>' + color + '</color>';
+			result += '</setKey>';
+			result += '\n';
+			
+			return result;
+		}
+		
+		/**
+		 * @private
+		 */
+		private function buildMessage(level : LogLevel, message : String) : String
+		{
+			var result : String = PACKET_HEADER;
+			if(message.indexOf('\n') >= 0)
+			{
+				const lines : Array = message.split('\n');
+				
+				result += '<showFoldMessage key="' + level.name + '">'; 
+				result += '<title>' + escapeMessage(lines.shift()) + '</title>';
+				result += '<message>' + escapeMessage(lines.join('\n')) + '</message>';
+				result += '</showFoldMessage>';
+				result += '\n';
+			}
+			else
+			{
+				result += '<showMessage key="' + level.name + '">'; 
+				result += escapeMessage(message);
+				result += '</showMessage>';
+				result += '\n';
+			}
+					
+			return result;
 		}
 	}
 }

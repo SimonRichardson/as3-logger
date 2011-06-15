@@ -1,5 +1,6 @@
 package org.osflash.logger
 {
+	import org.osflash.logger.output.SOSMaxOutput;
 	import org.osflash.logger.streams.BufferedOutputStream;
 	import org.osflash.logger.formatter.LogDateFormatter;
 	import org.osflash.logger.formatter.LogTimestampFormatter;
@@ -12,11 +13,13 @@ package org.osflash.logger
 	public class LogFactory implements ILogFactory
 	{
 		
-		public static const DEFAULT : int = 0;
+		public static const DEFAULT : int = SOS;
 		
-		public static const BUFFERED : int = 1;
+		public static const TRACE : int = 0;
 		
-		public static const TEXTFIELD : int = 2;
+		public static const TEXTFIELD : int = 1;
+		
+		public static const SOS : int = 2;
 		
 		logger_namespace static const DEFAULT_LOGGER : ILog = new LogFactory().create(DEFAULT);
 		
@@ -38,8 +41,16 @@ package org.osflash.logger
 					
 					stream.add(output);	
 					break; 
+				
+				case SOS:
+					output = new SOSMaxOutput();
 					
-				case DEFAULT:
+					output.add(new LogDateFormatter());
+					output.add(new LogTimestampFormatter());
+					
+					stream.add(output);
+					break;
+				case TRACE:
 					output = new TraceOuput();
 					
 					output.add(new LogDateFormatter());
