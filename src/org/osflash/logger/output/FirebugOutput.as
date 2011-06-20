@@ -28,7 +28,7 @@ package org.osflash.logger.output
 			if(!_enabled) return;
 			
 			// Firebug doesn't support Fatal.
-			const levelName : String = LogLevel.FATAL ? LogLevel.ERROR.name : level.name;
+			const levelName : String = level == LogLevel.FATAL ? LogLevel.ERROR.name : level.name;
 			const methodName : String = "console." + levelName;
 			
 			ExternalInterface.call(methodName, message);
