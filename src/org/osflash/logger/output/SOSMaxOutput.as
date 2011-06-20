@@ -71,11 +71,11 @@ package org.osflash.logger.output
 		private function handleConnect(event : Event) : void 
 		{
 			_socket.send(buildClear());
-			_socket.send(buildSetKey(LogLevel.DEBUG, 0xefefef));
-			_socket.send(buildSetKey(LogLevel.INFO, 0xe2ff00));
-			_socket.send(buildSetKey(LogLevel.WARN, 0xff7c00));
-			_socket.send(buildSetKey(LogLevel.ERROR, 0xff008e));
-			_socket.send(buildSetKey(LogLevel.FATAL, 0xff0000));
+			_socket.send(buildSetKey(LogLevel.DEBUG, 0xAAD4FF)); // 170 212 255
+			_socket.send(buildSetKey(LogLevel.INFO, 0xFFFF95)); // 255 255 149
+			_socket.send(buildSetKey(LogLevel.WARN, 0xFF9933)); // 255 153 51
+			_socket.send(buildSetKey(LogLevel.ERROR, 0xFF1313)); // 255 19 19
+			_socket.send(buildSetKey(LogLevel.FATAL, 0xD90303)); // 217 3 3
 			
 			const total : int = _buffer.length;
 			for(var i : int = 0; i<total; i++)
