@@ -44,10 +44,7 @@ package org.osflash.logger
 				
 				case SOS:
 					output = new SOSMaxOutput();
-					
-					output.add(new LogDateFormatter());
-					output.add(new LogTimestampFormatter());
-					
+										
 					stream.add(output);
 					break;
 				case TRACE:

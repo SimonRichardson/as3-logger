@@ -25,9 +25,15 @@ package org.osflash.logger.output
 		 * @private
 		 */
 		private var _buffer : Vector.<BufferedOutputMessage>;
+		
+		/**
+		 * @private
+		 */
+		private var _failed : Boolean;
 
 		public function SOSMaxOutput()
 		{
+			_failed = false;
 			_buffer = new Vector.<BufferedOutputMessage>();
 			
 			_socket = new XMLSocket();
@@ -44,6 +50,8 @@ package org.osflash.logger.output
 		 */			
 		override public function log(level : LogLevel, message : String) : void
 		{
+			if (_failed) return;
+				
 			if (_socket.connected)
 				_socket.send(buildMessage(level, message));
             else
@@ -84,6 +92,10 @@ package org.osflash.logger.output
 		 */
 		private function handleError(event : Event) : void 
 		{
+			_failed = true;
+			_socket = null;
+			_buffer.length = 0;
+			
 			trace("SOSLogOutput Error : " + event);
 		}
 		
