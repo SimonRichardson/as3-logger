@@ -16,11 +16,13 @@ package org.osflash.logger
 
 		public static const FATAL : LogLevel = new LogLevel("fatal");
 
-		public var name : String;
+		private var _name : String;
 
 		public function LogLevel(logName : String) 
 		{
-			name = logName;
+			_name = logName;
 		}
+
+		public function get name() : String { return _name; }
 	}
 }

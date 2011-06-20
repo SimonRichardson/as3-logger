@@ -29,11 +29,11 @@ package org.osflash.logger.output
 		/**
 		 * @private
 		 */
-		private var _failed : Boolean;
+		private var _enabled : Boolean;
 
 		public function SOSMaxOutput()
 		{
-			_failed = false;
+			_enabled = true;
 			_buffer = new Vector.<BufferedOutputMessage>();
 			
 			_socket = new XMLSocket();
@@ -50,7 +50,7 @@ package org.osflash.logger.output
 		 */			
 		override public function log(level : LogLevel, message : String) : void
 		{
-			if (_failed) return;
+			if (!_enabled) return;
 				
 			if (_socket.connected)
 				_socket.send(buildMessage(level, message));
@@ -92,7 +92,7 @@ package org.osflash.logger.output
 		 */
 		private function handleError(event : Event) : void 
 		{
-			_failed = true;
+			_enabled = false;
 			_socket = null;
 			_buffer.length = 0;
 			
