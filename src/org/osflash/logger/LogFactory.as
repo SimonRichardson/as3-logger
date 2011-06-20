@@ -1,5 +1,6 @@
 package org.osflash.logger
 {
+	import org.osflash.logger.output.FirebugOutput;
 	import org.osflash.logger.output.SOSMaxOutput;
 	import org.osflash.logger.streams.BufferedOutputStream;
 	import org.osflash.logger.formatter.LogDateFormatter;
@@ -21,6 +22,8 @@ package org.osflash.logger
 		
 		public static const SOS : int = 2;
 		
+		public static const FIREBUG : int = 3;
+		
 		logger_namespace static const DEFAULT_LOGGER : ILog = new LogFactory().create(DEFAULT);
 		
 		public function create(type : int, buffered : Boolean = false) : ILog
@@ -33,6 +36,15 @@ package org.osflash.logger
 														new DefaultOutputStream();
 			switch(type)
 			{
+				case TRACE:
+					output = new TraceOuput();
+					
+					output.add(new LogDateFormatter());
+					output.add(new LogTimestampFormatter());
+					
+					stream.add(output);
+					break;
+					
 				case TEXTFIELD:
 					output = new TextFieldOutput();
 					
@@ -47,14 +59,13 @@ package org.osflash.logger
 										
 					stream.add(output);
 					break;
-				case TRACE:
-					output = new TraceOuput();
-					
-					output.add(new LogDateFormatter());
-					output.add(new LogTimestampFormatter());
+				
+				case FIREBUG:
+					output = new FirebugOutput();
 					
 					stream.add(output);
 					break;
+				
 				default:
 					throw new ArgumentError('Unknown log type');
 					break;
