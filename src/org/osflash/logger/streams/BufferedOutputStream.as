@@ -20,12 +20,22 @@ package org.osflash.logger.streams
 		/**
 		 * @private
 		 */
-		private var _timer : Timer;
+		private var _bufferTimer : Timer;
+		
+		/**
+		 * @private
+		 */
+		private var _closeTimer : Timer;
 		
 		/**
 		 * @private
 		 */
 		private var _buffer : Vector.<BufferedOutputMessage>;
+		
+		/**
+		 * @private
+		 */
+		private var _enabled : Boolean;
 		
 		/**
 		 * Constructor for the BufferedOutputStream
@@ -36,8 +46,13 @@ package org.osflash.logger.streams
 			
 			_buffer = new Vector.<BufferedOutputMessage>();
 			
-			_timer = new Timer(500, -1);
-			_timer.addEventListener(TimerEvent.TIMER, handleTimerEvent);
+			_bufferTimer = new Timer(500, -1);
+			_bufferTimer.addEventListener(TimerEvent.TIMER, handleBufferTimerEvent);
+			
+			_closeTimer = new Timer(1000, -1);
+			_closeTimer.addEventListener(TimerEvent.TIMER, handleCloseTimerEvent);
+			
+			_enabled = true;
 		}
 		
 		/**
@@ -91,6 +106,8 @@ package org.osflash.logger.streams
 		 */
 		public function write(level : LogLevel, message : String) : void
 		{
+			if(!enabled) return;
+			
 			const total : int = _outputs.length;
 			for(var i : int = 0; i < total; i++)
 			{
@@ -99,15 +116,16 @@ package org.osflash.logger.streams
 				_buffer.push(new BufferedOutputMessage(output, level, outputMessage));
 			}
 			
-			if(!_timer.running) _timer.start();
+			if(!_bufferTimer.running) _bufferTimer.start();
 			
-			// TODO : have a timer here to workout if we can close this down or not!
+			_closeTimer.reset();
+			_closeTimer.start();
 		}
 		
 		/**
 		 * @private
 		 */
-		private function handleTimerEvent(event : TimerEvent) : void
+		private function handleBufferTimerEvent(event : TimerEvent) : void
 		{
 			var index : int = _buffer.length;
 			while(--index > -1)
@@ -116,6 +134,22 @@ package org.osflash.logger.streams
 				bufferedMessage.output.log(bufferedMessage.level, bufferedMessage.message);
 			}
 		}
+		
+		/**
+		 * @private
+		 */
+		private function handleCloseTimerEvent(event : TimerEvent) : void
+		{
+			if(_bufferTimer.running) _bufferTimer.stop();
+			
+			_closeTimer.stop();
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get enabled() : Boolean { return _enabled; }
+		public function set enabled(value : Boolean) : void { _enabled = value; }
 		
 		/**
 		 * @inheritDoc

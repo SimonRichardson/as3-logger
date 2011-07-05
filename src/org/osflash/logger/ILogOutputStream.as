@@ -16,6 +16,9 @@ package org.osflash.logger
 		
 		function write(level : LogLevel, message : String) : void;
 		
+		function get enabled() : Boolean;
+		function set enabled(value : Boolean) : void;
+		
 		function get length() : int;
 	}
 }

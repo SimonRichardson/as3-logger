@@ -62,5 +62,11 @@ package org.osflash.logger
 		 * @inheritDoc
 		 */
 		public function get stream() : ILogOutputStream { return _stream; }
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get enabled() : Boolean { return stream.enabled; }
+		public function set enabled(value : Boolean) : void { stream.enabled = value; }
 	}
 }

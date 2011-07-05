@@ -15,11 +15,18 @@ package org.osflash.logger.streams
 		private var _outputs : Vector.<ILogOutput>;
 		
 		/**
+		 * @private
+		 */
+		private var _enabled : Boolean;
+		
+		/**
 		 * Constructor for the LogOutputStream
 		 */
 		public function DefaultOutputStream()
 		{
 			_outputs = new Vector.<ILogOutput>();
+			
+			_enabled = true;
 		}
 		
 		/**
@@ -73,6 +80,8 @@ package org.osflash.logger.streams
 		 */
 		public function write(level : LogLevel, message : String) : void
 		{
+			if(!enabled) return;
+			
 			const total : int = _outputs.length;
 			for(var i : int = 0; i < total; i++)
 			{
@@ -81,6 +90,12 @@ package org.osflash.logger.streams
 				output.log(level, outputMessage);
 			}
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function get enabled() : Boolean { return _enabled; }
+		public function set enabled(value : Boolean) : void { _enabled = value; }
 		
 		/**
 		 * @inheritDoc

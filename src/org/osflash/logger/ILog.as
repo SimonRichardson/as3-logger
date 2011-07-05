@@ -17,5 +17,8 @@ package org.osflash.logger
 		function fatal(...args) : void;
 		
 		function get stream() : ILogOutputStream;
+		
+		function get enabled() : Boolean;
+		function set enabled(value : Boolean) : void;
 	}
 }
