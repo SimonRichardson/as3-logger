@@ -1,4 +1,4 @@
-package org.osflash.logger.utils
+package org.osflash.logger.logs
 {
 	import org.osflash.logger.LogFactory;
 	import org.osflash.logger.logger_namespace;

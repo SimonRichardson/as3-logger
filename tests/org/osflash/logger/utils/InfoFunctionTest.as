@@ -1,5 +1,6 @@
 package org.osflash.logger.utils
 {
+	import org.osflash.logger.logs.info;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
