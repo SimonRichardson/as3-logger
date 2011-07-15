@@ -22,6 +22,11 @@ package org.osflash.logger.streams
 		/**
 		 * @private
 		 */
+		private var _filters : Vector.<LogTag>;
+		
+		/**
+		 * @private
+		 */
 		private var _bufferTimer : Timer;
 		
 		/**
@@ -44,6 +49,7 @@ package org.osflash.logger.streams
 		 */
 		public function BufferedOutputStream()
 		{
+			_filters = new Vector.<LogTag>();
 			_outputs = new Vector.<ILogOutput>();
 			
 			_buffer = new Vector.<BufferedOutputMessage>();
@@ -102,6 +108,23 @@ package org.osflash.logger.streams
 			
 			return _outputs[index];
 		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function filter(tag : LogTag) : void
+		{
+			if(_filters.indexOf(tag) == -1) _filters.push(tag);
+		}
+		
+		/**
+		 * @inheritDoc
+		 */
+		public function filterNot(tag : LogTag) : void
+		{
+			const index : int = _filters.indexOf(tag);
+			if(index >= 0) _filters.splice(index, 1);
+		}
 
 		/**
 		 * @inheritDoc
@@ -109,6 +132,9 @@ package org.osflash.logger.streams
 		public function write(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			if(!enabled) return;
+			
+			// We don't want to show the tag, we could save it - depends on if people want the data?
+			if(_filters.length > 0 && _filters.indexOf(tag) >= 0) return;
 			
 			const total : int = _outputs.length;
 			for(var i : int = 0; i < total; i++)

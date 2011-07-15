@@ -14,6 +14,10 @@ package org.osflash.logger
 		
 		function getAt(index : int) : ILogOutput;
 		
+		function filter(tag : LogTag) : void;
+		
+		function filterNot(tag : LogTag) : void;
+		
 		function write(tag : LogTag, level : LogLevel, message : String) : void;
 		
 		function get enabled() : Boolean;
