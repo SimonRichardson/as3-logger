@@ -1,5 +1,6 @@
 package org.osflash.logger
 {
+	import org.osflash.logger.output.DConsoleOutput;
 	import org.osflash.logger.output.FirebugOutput;
 	import org.osflash.logger.output.SOSMaxOutput;
 	import org.osflash.logger.streams.BufferedOutputStream;
@@ -23,6 +24,8 @@ package org.osflash.logger
 		public static const SOS : int = 2;
 		
 		public static const FIREBUG : int = 3;
+		
+		public static const DCONSOLE : int = 4;
 		
 		logger_namespace static const DEFAULT_LOGGER : ILog = new LogFactory().create(DEFAULT);
 		
@@ -62,6 +65,12 @@ package org.osflash.logger
 				
 				case FIREBUG:
 					output = new FirebugOutput();
+					
+					stream.add(output);
+					break;
+				
+				case DCONSOLE:
+					output = new DConsoleOutput();
 					
 					stream.add(output);
 					break;
