@@ -1,9 +1,11 @@
 package org.osflash.logger.support.mocks
 {
-	import asunit.asserts.assertNotNull;
 	import asunit.asserts.assertEquals;
+	import asunit.asserts.assertNotNull;
+
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
 	import org.osflash.logger.output.AbstractOutput;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
@@ -15,7 +17,7 @@ package org.osflash.logger.support.mocks
 		
 		private var _message : String;
 		
-		override public function log(level : LogLevel, message : String) : void
+		override public function log(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			assertNotNull('LogLevel should not be null', level);
 			assertEquals('LogLevel should equal', _level, level);
