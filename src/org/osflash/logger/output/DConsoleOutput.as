@@ -1,8 +1,10 @@
 package org.osflash.logger.output
 {
-	import flash.utils.getDefinitionByName;
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
+
+	import flash.utils.getDefinitionByName;
 	/**
 	 * @author Simon Richardson - simon@ustwo.co.uk
 	 */
@@ -44,7 +46,7 @@ package org.osflash.logger.output
 		/**
 		 * @inheritDoc
 		 */			
-		override public function log(level : LogLevel, message : String) : void
+		override public function log(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			if(!_enabled) return;
 			
@@ -68,7 +70,7 @@ package org.osflash.logger.output
 					break;
 			}
 						
-			_consolePrint(message, consoleLevel);
+			_consolePrint('[' + tag.name.toUpperCase() + ']' + message, consoleLevel);
 		}
 	}
 }

@@ -23,7 +23,8 @@ package org.osflash.logger
 		 */
 		public function debug(...args) : void
 		{
-			_stream.write(LogLevel.DEBUG, args.join(" "));
+			const tag : LogTag = args[0] is LogTag ? args.shift() : LogTag.DEFAULT;
+			_stream.write(tag, LogLevel.DEBUG, args.join(" "));
 		}
 
 		/**
@@ -31,7 +32,8 @@ package org.osflash.logger
 		 */
 		public function info(...args) : void
 		{
-			_stream.write(LogLevel.INFO, args.join(" "));
+			const tag : LogTag = args[0] is LogTag ? args.shift() : LogTag.DEFAULT;
+			_stream.write(tag, LogLevel.INFO, args.join(" "));
 		}
 
 		/**
@@ -39,7 +41,8 @@ package org.osflash.logger
 		 */
 		public function warn(...args) : void
 		{
-			_stream.write(LogLevel.WARN, args.join(" "));
+			const tag : LogTag = args[0] is LogTag ? args.shift() : LogTag.DEFAULT;
+			_stream.write(tag, LogLevel.WARN, args.join(" "));
 		}
 
 		/**
@@ -47,7 +50,8 @@ package org.osflash.logger
 		 */
 		public function error(...args) : void
 		{
-			_stream.write(LogLevel.ERROR, args.join(" "));
+			const tag : LogTag = args[0] is LogTag ? args.shift() : LogTag.DEFAULT;
+			_stream.write(tag, LogLevel.ERROR, args.join(" "));
 		}
 
 		/**
@@ -55,7 +59,8 @@ package org.osflash.logger
 		 */
 		public function fatal(...args) : void
 		{
-			_stream.write(LogLevel.FATAL, args.join(" "));
+			const tag : LogTag = args[0] is LogTag ? args.shift() : LogTag.DEFAULT;
+			_stream.write(tag, LogLevel.FATAL, args.join(" "));
 		}
 		
 		/**

@@ -1,10 +1,12 @@
 package org.osflash.logger.streams
 {
-	import flash.events.TimerEvent;
-	import flash.utils.Timer;
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.ILogOutputStream;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
+
+	import flash.events.TimerEvent;
+	import flash.utils.Timer;
 
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
@@ -104,7 +106,7 @@ package org.osflash.logger.streams
 		/**
 		 * @inheritDoc
 		 */
-		public function write(level : LogLevel, message : String) : void
+		public function write(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			if(!enabled) return;
 			
@@ -113,7 +115,7 @@ package org.osflash.logger.streams
 			{
 				const output : ILogOutput = _outputs[i];
 				const outputMessage : String = output.process(message);
-				_buffer.push(new BufferedOutputMessage(output, level, outputMessage));
+				_buffer.push(new BufferedOutputMessage(output, tag, level, outputMessage));
 			}
 			
 			if(!_bufferTimer.running) _bufferTimer.start();
@@ -131,7 +133,10 @@ package org.osflash.logger.streams
 			while(--index > -1)
 			{
 				const bufferedMessage : BufferedOutputMessage = _buffer.shift();
-				bufferedMessage.output.log(bufferedMessage.level, bufferedMessage.message);
+				bufferedMessage.output.log(	bufferedMessage.tag, 
+											bufferedMessage.level, 
+											bufferedMessage.message
+											);
 			}
 		}
 		

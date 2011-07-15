@@ -3,6 +3,7 @@ package org.osflash.logger.streams
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.ILogOutputStream;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
@@ -78,7 +79,7 @@ package org.osflash.logger.streams
 		/**
 		 * @inheritDoc
 		 */
-		public function write(level : LogLevel, message : String) : void
+		public function write(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			if(!enabled) return;
 			
@@ -87,7 +88,7 @@ package org.osflash.logger.streams
 			{
 				const output : ILogOutput = _outputs[i];
 				const outputMessage : String = output.process(message);
-				output.log(level, outputMessage);
+				output.log(tag, level, outputMessage);
 			}
 		}
 		

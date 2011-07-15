@@ -2,6 +2,7 @@ package org.osflash.logger.output
 {
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
 
 	import flash.external.ExternalInterface;
 	/**
@@ -23,7 +24,7 @@ package org.osflash.logger.output
 		/**
 		 * @inheritDoc
 		 */			
-		override public function log(level : LogLevel, message : String) : void
+		override public function log(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			if(!_enabled) return;
 			
@@ -31,7 +32,7 @@ package org.osflash.logger.output
 			const levelName : String = level == LogLevel.FATAL ? LogLevel.ERROR.name : level.name;
 			const methodName : String = "console." + levelName;
 			
-			ExternalInterface.call(methodName, message);
+			ExternalInterface.call(methodName, '[' + tag.name.toUpperCase() + ']' + message);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package org.osflash.logger.output
 	import org.osflash.logger.ILogFormatter;
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
 	/**
 	 * @author Simon Richardson - me@simonrichardson.info
 	 */
@@ -39,7 +40,7 @@ package org.osflash.logger.output
 		/**
 		 * @inheritDoc
 		 */
-		public function log(level : LogLevel, message : String) : void
+		public function log(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			throw new Error('Abstract method error');
 		}

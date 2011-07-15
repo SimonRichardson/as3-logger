@@ -2,6 +2,7 @@ package org.osflash.logger.output
 {
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
 
 	import flash.text.TextField;
 	/**
@@ -23,9 +24,12 @@ package org.osflash.logger.output
 		/**
 		 * @inheritDoc
 		 */	
-		override public function log(level : LogLevel, message : String) : void
+		override public function log(tag : LogTag, level : LogLevel, message : String) : void
 		{
-			_textField.appendText('[' + level.name.toUpperCase() + '] ' + message + '\n');
+			_textField.appendText(	'[' + tag.name.toUpperCase() + ']' + 
+									'[' + level.name.toUpperCase() + '] ' + 
+									message + '\n'
+									);
 		}
 		
 		/**

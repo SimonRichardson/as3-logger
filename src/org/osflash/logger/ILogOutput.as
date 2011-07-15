@@ -8,7 +8,7 @@ package org.osflash.logger
 		
 		function process(message : String) : String;
 		
-		function log(level : LogLevel, message : String) : void;
+		function log(tag : LogTag, level : LogLevel, message : String) : void;
 		
 		function add(formatter : ILogFormatter) : ILogFormatter;
 		

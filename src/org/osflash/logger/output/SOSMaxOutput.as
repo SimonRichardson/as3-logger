@@ -2,6 +2,7 @@ package org.osflash.logger.output
 {
 	import org.osflash.logger.ILogOutput;
 	import org.osflash.logger.LogLevel;
+	import org.osflash.logger.LogTag;
 	import org.osflash.logger.streams.BufferedOutputMessage;
 
 	import flash.events.Event;
@@ -48,19 +49,20 @@ package org.osflash.logger.output
 		/**
 		 * @inheritDoc
 		 */			
-		override public function log(level : LogLevel, message : String) : void
+		override public function log(tag : LogTag, level : LogLevel, message : String) : void
 		{
 			if (!_enabled) return;
 				
 			if (_socket.connected)
-				_socket.send(buildMessage(level, message));
+				_socket.send(buildMessage(tag, level, message));
             else
             {
             	const bufferedMessage : BufferedOutputMessage = new BufferedOutputMessage(
-																	this, 
-																	level, 
-																	buildMessage(level, message)
-																	);
+																this, 
+																tag,
+																level, 
+																buildMessage(tag, level, message)
+																);
             	_buffer.push(bufferedMessage);
             }
 		}
@@ -141,7 +143,7 @@ package org.osflash.logger.output
 		/**
 		 * @private
 		 */
-		private function buildMessage(level : LogLevel, message : String) : String
+		private function buildMessage(tag : LogTag, level : LogLevel, message : String) : String
 		{
 			var result : String = PACKET_HEADER;
 			if(message.indexOf('\n') >= 0)
@@ -149,7 +151,9 @@ package org.osflash.logger.output
 				const lines : Array = message.split('\n');
 				
 				result += '<showFoldMessage key="' + level.name + '">'; 
-				result += '<title>' + escapeMessage(lines.shift()) + '</title>';
+				result += '<title>'; 
+				result += '[' + tag.name.toUpperCase() + ']' + escapeMessage(lines.shift());
+				result += '</title>';
 				result += '<message>' + escapeMessage(lines.join('\n')) + '</message>';
 				result += '</showFoldMessage>';
 				result += '\n';
@@ -157,7 +161,7 @@ package org.osflash.logger.output
 			else
 			{
 				result += '<showMessage key="' + level.name + '">'; 
-				result += escapeMessage(message);
+				result += '[' + tag.name.toUpperCase() + ']' + escapeMessage(message);
 				result += '</showMessage>';
 				result += '\n';
 			}
