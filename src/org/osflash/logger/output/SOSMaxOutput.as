@@ -31,9 +31,16 @@ package org.osflash.logger.output
 		 * @private
 		 */
 		private var _enabled : Boolean;
+		
+		/**
+		 * @private
+		 */
+		private var _foldMessage : Boolean;
 
-		public function SOSMaxOutput()
+		public function SOSMaxOutput(foldMessage : Boolean = true)
 		{
+			_foldMessage = foldMessage;
+			
 			_enabled = true;
 			_buffer = new Vector.<BufferedOutputMessage>();
 			
@@ -146,7 +153,7 @@ package org.osflash.logger.output
 		private function buildMessage(tag : LogTag, level : LogLevel, message : String) : String
 		{
 			var result : String = PACKET_HEADER;
-			if(message.indexOf('\n') >= 0)
+			if(foldMessage && message.indexOf('\n') >= 0)
 			{
 				const lines : Array = message.split('\n');
 				
@@ -168,5 +175,8 @@ package org.osflash.logger.output
 					
 			return result;
 		}
+		
+		public function get foldMessage() : Boolean { return _foldMessage; }
+		public function set foldMessage(value : Boolean) : void { _foldMessage = value; }
 	}
 }
